@@ -1,5 +1,5 @@
 # poppy.vim
-vim port of highlightparentheses.el which gives rainbow parens propagating from the cursor
+vim port of [highlightparentheses.el](https://github.com/tsdh/highlight-parentheses.el) which gives rainbow parens propagating from the cursor
 
 Enable like:
 `au! cursormoved * call PoppyInit()`
