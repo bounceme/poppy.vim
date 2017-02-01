@@ -5,6 +5,6 @@ Enable like:
 `au! cursorhold * call PoppyInit()`
 
 or:
-`au! cursormoved * call PoppyInit()`
+`au! cursormoved *.lisp call PoppyInit()`
 
 modify highlight groups by changing `g:poppyhigh`, which is a list of highlight group names
