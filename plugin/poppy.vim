@@ -14,7 +14,7 @@ function s:highpat()
 endfunction
 
 function s:endpart(b)
-  let idx = index(['[','(','{'],getline('.')[col('.')-1])
+  let idx = stridx('[({',getline('.')[col('.')-1])
   let p = searchpairpos(['\[','(','{'][idx],'','])}'[idx],'nW',"synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string'"
         \ ,a:b,300)
   if p[0] && line2byte(p[0])+p[1] > line2byte(g:pos[0]) + g:pos[1]
