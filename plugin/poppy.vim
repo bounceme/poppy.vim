@@ -8,7 +8,9 @@ function s:highpat()
   let stoplinebottom = line('w$')
   let stoplinetop = line('w0')
   let s:poppyhigh = deepcopy(g:poppyhigh)
-  call searchpair('[[({]','','[]})]','rnbW',"synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string' || s:endpart(".stoplinebottom.")",stoplinetop,30)
+  call searchpair('[[({]','','[]})]','rnbW',"getline('.')[col('.')-1] =~ '[]})]' ||"
+        \ ."synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string' ||"
+        \ ."s:endpart(".stoplinebottom.")",stoplinetop,30)
 endfunction
 
 function s:endpart(b)
@@ -22,8 +24,8 @@ endfunction
 
 function s:addm(p,e)
   let ak = s:poppyhigh[0]
-  call extend(s:matches,[matchaddpos(remove(s:poppyhigh,0),[a:p,a:e])])
-  call extend(s:poppyhigh,[ak])
+  call add(s:matches,matchaddpos(remove(s:poppyhigh,0),[a:p,a:e]))
+  call add(s:poppyhigh,ak)
 endfunction
 
 function PoppyInit()
