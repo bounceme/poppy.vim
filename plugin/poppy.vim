@@ -1,4 +1,4 @@
-if !exists('*matchaddpos') || !has('reltime') || exists('*PoppyInit')
+if !has('reltime') || exists('*PoppyInit')
   finish
 endif
 let g:poppyhigh = get(g:,'poppyhigh',['identifier','constant','preproc','special','type'])
@@ -13,6 +13,16 @@ function s:highpat()
         \ ."s:endpart(".stoplinebottom.")",stoplinetop,30)
 endfunction
 
+if exists('*matchaddpos')
+  function s:matchadd(hi,pos)
+    return matchaddpos(a:hi,a:pos)
+  endfunction
+else
+  function s:matchadd(hi,pos)
+    return matchadd(a:hi,'\%' . a:pos[0][0] . 'l\%' . a:pos[0][1] . 'c\|\%' . a:pos[1][0] . 'l\%' . a:pos[1][1] . 'c')
+  endfunction
+endif
+
 function s:endpart(b)
   let idx = stridx('[({',getline('.')[col('.')-1])
   let p = searchpairpos(['\[','(','{'][idx],'','])}'[idx],'nW',"synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string'"
@@ -26,7 +36,7 @@ endfunction
 
 function s:addm(p,e)
   let ak = s:poppyhigh[0]
-  call add(s:matches,matchaddpos(remove(s:poppyhigh,0),[a:p,a:e]))
+  call add(s:matches,s:matchadd(remove(s:poppyhigh,0),[a:p,a:e]))
   call add(s:poppyhigh,ak)
 endfunction
 
