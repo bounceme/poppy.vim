@@ -2,6 +2,7 @@ if !exists('*matchaddpos') || !has('reltime') || exists('*PoppyInit')
   finish
 endif
 let g:poppyhigh = get(g:,'poppyhigh',['identifier','constant','preproc','special','type'])
+let s:matches = []
 
 function s:highpat()
   let stoplinebottom = line('w$')
@@ -15,20 +16,16 @@ function s:endpart(b)
   let p = searchpairpos(['\[','(','{'][idx],'','])}'[idx],'nW',"synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string'"
         \ ,a:b,300)
   if p[0] && line2byte(p[0])+p[1] > line2byte(g:pos[0]) + g:pos[1]
-    call s:addm(getpos('.')[1:2])
-    call s:addend(p)
+    call s:addm(getpos('.')[1:2],p)
   endif
 endfunction
 
-function s:addm(p)
+function s:addm(p,e)
   let ak = s:poppyhigh[0]
-  call matchaddpos(remove(s:poppyhigh,0),[a:p])
+  call extend(s:matches,[matchaddpos(remove(s:poppyhigh,0),[a:p,a:e])])
   call extend(s:poppyhigh,[ak])
-endfunction
-function s:addend(p)
-  call matchaddpos(s:poppyhigh[-1],[a:p])
 endfunction
 
 function PoppyInit()
-  let g:pos = getpos('.')[1:2] | call clearmatches() | call s:highpat()
+  let g:pos = getpos('.')[1:2] | silent! call filter(s:matches,'matchdelete(v:val)>0') | call s:highpat()
 endfunction
