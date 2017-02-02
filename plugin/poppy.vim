@@ -19,6 +19,8 @@ function s:endpart(b)
         \ ,a:b,300)
   if p[0] && line2byte(p[0])+p[1] > line2byte(g:pos[0]) + g:pos[1]
     call s:addm(getpos('.')[1:2],p)
+  else
+    return 1
   endif
 endfunction
 
