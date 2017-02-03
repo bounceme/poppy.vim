@@ -34,12 +34,11 @@ function s:endpart(b)
 endfunction
 
 function s:addm(p,e)
-  let ak = s:poppyhigh[0]
-  call add(w:matches,s:matchadd(remove(s:poppyhigh,0),[a:p,a:e]))
-  call add(s:poppyhigh,ak)
+  call add(w:poppies,s:matchadd(s:poppyhigh[0],[a:p,a:e]))
+  call add(s:poppyhigh,remove(s:poppyhigh,0))
 endfunction
 
 function PoppyInit()
-  let g:pos = getpos('.')[1:2] | let w:matches = get(w:,'matches',[])
-        \ | silent! call filter(w:matches,'matchdelete(v:val)>0') | call s:highpat()
+  let g:pos = getpos('.')[1:2] | let w:poppies = get(w:,'poppies',[])
+        \ | silent! call filter(w:poppies,'matchdelete(v:val)>0') | call s:highpat()
 endfunction
