@@ -26,7 +26,7 @@ function s:endpart(b)
   let idx = stridx('[({',getline('.')[col('.')-1])
   let p = searchpairpos(['\[','(','{'][idx],'','])}'[idx],'nW',"synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string'"
         \ ,a:b,300)
-  if p[0] && line2byte(p[0])+p[1] > line2byte(g:pos[0]) + g:pos[1]
+  if p[0] && line2byte(p[0])+p[1] > line2byte(s:pos[0]) + s:pos[1]
     call s:addm(getpos('.')[1:2],p)
   else
     return 1
@@ -39,6 +39,6 @@ function s:addm(p,e)
 endfunction
 
 function PoppyInit()
-  let g:pos = getpos('.')[1:2] | let w:poppies = get(w:,'poppies',[])
+  let s:pos = getpos('.')[1:2] | let w:poppies = get(w:,'poppies',[])
         \ | silent! call filter(w:poppies,'matchdelete(v:val)>0') | call s:highpat()
 endfunction
