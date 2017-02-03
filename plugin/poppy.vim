@@ -2,7 +2,6 @@ if !has('reltime') || exists('*PoppyInit')
   finish
 endif
 let g:poppyhigh = get(g:,'poppyhigh',['identifier','constant','preproc','special','type'])
-let s:matches = []
 
 function s:highpat()
   let stoplinebottom = line('w$')
@@ -36,10 +35,11 @@ endfunction
 
 function s:addm(p,e)
   let ak = s:poppyhigh[0]
-  call add(s:matches,s:matchadd(remove(s:poppyhigh,0),[a:p,a:e]))
+  call add(w:matches,s:matchadd(remove(s:poppyhigh,0),[a:p,a:e]))
   call add(s:poppyhigh,ak)
 endfunction
 
 function PoppyInit()
-  let g:pos = getpos('.')[1:2] | silent! call filter(s:matches,'matchdelete(v:val)>0') | call s:highpat()
+  let g:pos = getpos('.')[1:2] | let w:matches = get(w:,'matches',[])
+        \ | silent! call filter(w:matches,'matchdelete(v:val)>0') | call s:highpat()
 endfunction
