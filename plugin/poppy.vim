@@ -7,7 +7,7 @@ function s:highpat()
   let stoplinebottom = line('w$')
   let stoplinetop = line('w0')
   let s:poppyhigh = deepcopy(g:poppyhigh)
-  call searchpair('[[({]','','noop','rnbW',"getline('.')[col('.')-1] =~ '\\a' ||"
+  call searchpair('[[({]','','noop',(len(g:poppyhigh) > 1 ? 'r' : '').'nbW',"getline('.')[col('.')-1] == 'n' ||"
         \ ."synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string' ||"
         \ ."s:endpart(".stoplinebottom.")",stoplinetop,30)
 endfunction
