@@ -23,4 +23,4 @@ nnoremap <silent> <leader>hp :call clearmatches() \| let g:poppy = -get(g:,'popp
 
 modify coloring by changing `g:poppyhigh`, which is a list of highlight group names. 
 
-If you want [vim-matchparenalways](https://github.com/justinmk/vim-matchparenalways) like behaviour, let `g:poppyhigh` to have just 1 group name.
+If you want [vim-matchparenalways](https://github.com/justinmk/vim-matchparenalways) like behaviour, let `g:poppyhigh` to a list with 1 group name.
