@@ -24,3 +24,6 @@ nnoremap <silent> <leader>hp :call clearmatches() \| let g:poppy = -get(g:,'popp
 modify coloring by changing `g:poppyhigh`, which is a list of highlight group names. 
 
 If you want only 1 paren level highlighted, let `g:poppyhigh` to a list with 1 group name.
+
+If you want the highlighting to include matches which are under the cursor, like the matchparen plugin
+included with vim, `let g:poppy_point_enable = 1` .
