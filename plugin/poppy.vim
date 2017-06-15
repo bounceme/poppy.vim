@@ -7,7 +7,8 @@ function s:highpat()
   let stoplinebottom = line('w$')
   let stoplinetop = line('w0')
   let s:poppyhigh = deepcopy(g:poppyhigh)
-  call searchpair('[[({]','','noop',(len(g:poppyhigh) > 1 ? 'r' : '').'nbW',"getline('.')[col('.')-1] == 'n' ||"
+  let inc = get(g:,'poppy_point_enable') && getline('.')[col('.')-1] =~ '[[({]' ? 'c' : ''
+  call searchpair('[[({]','','noop',inc.(len(g:poppyhigh) > 1 ? 'r' : '').'nbW',"getline('.')[col('.')-1] == 'n' ||"
         \ ."synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string' ||"
         \ ."s:endpart(".stoplinebottom.")",stoplinetop,30)
 endfunction
@@ -26,7 +27,7 @@ function s:endpart(b)
   let idx = stridx('[({',getline('.')[col('.')-1])
   let p = searchpairpos(['\[','(','{'][idx],'','])}'[idx],'nW',"synIDattr(synID(line('.'),col('.'),0),'name') =~? 'regex\\|comment\\|string'"
         \ ,a:b,300)
-  if p[0] && line2byte(p[0])+p[1] > line2byte(s:pos[0]) + s:pos[1]
+  if p[0] && (line2byte(p[0])+p[1] > line2byte(s:pos[0]) + s:pos[1] || get(g:,'poppy_point_enable') && p == s:pos)
     call s:addm(getpos('.')[1:2],p)
   else
     return 1
