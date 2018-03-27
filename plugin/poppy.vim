@@ -9,7 +9,7 @@ function s:highpat()
   let stoplinetop = line('w0')
   let s:poppyhigh = deepcopy(g:poppyhigh)
   let inc = get(g:,'poppy_point_enable') && getline('.')[col('.')-1] =~ '[[({]' ? 'c' : ''
-  call searchpair('[[({]','','noop',inc.(len(g:poppyhigh) > 1 ? 'r' : '').'nbW',"getline('.')[col('.')-1] == 'n' ||"
+  call searchpair('\m[[({]','','noop',inc.(len(g:poppyhigh) > 1 ? 'r' : '').'nbW',"getline('.')[col('.')-1] == 'n' ||"
         \ ."s:SynAt(line('.'),col('.')) =~? 'regex\\|comment\\|string' ||"
         \ ."s:endpart(".stoplinebottom.")",stoplinetop,30)
 endfunction
@@ -33,19 +33,14 @@ else
 endif
 
 function s:endpart(b)
-  let idx = stridx('[({',getline('.')[col('.')-1])
-  let p = searchpairpos(['\[','(','{'][idx],'','])}'[idx],'nW',"s:SynAt(line('.'),col('.')) =~? 'regex\\|comment\\|string'"
+  let i = stridx('[({',getline('.')[col('.')-1])
+  let p = searchpairpos('\V'.'[({'[i],'','\V'.'])}'[i],'nW',"s:SynAt(line('.'),col('.')) =~? 'regex\\|comment\\|string'"
         \ ,a:b,300)
   if p[0] && (line2byte(p[0])+p[1] > line2byte(s:pos[0]) + s:pos[1] || get(g:,'poppy_point_enable') && p == s:pos)
-    call s:addm(getpos('.')[1:2],p)
+    let w:poppies += [s:matchadd(remove(add(s:poppyhigh,s:poppyhigh[0]),0), [getpos('.')[1:2],p])]
   else
     return 1
   endif
-endfunction
-
-function s:addm(p,e)
-  call add(w:poppies,s:matchadd(s:poppyhigh[0],[a:p,a:e]))
-  call add(s:poppyhigh,remove(s:poppyhigh,0))
 endfunction
 
 function PoppyInit()
